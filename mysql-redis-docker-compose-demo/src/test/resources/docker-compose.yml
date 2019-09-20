@@ -1,0 +1,12 @@
+version: "2"
+
+services:
+  redis-cache:
+    image: redis:latest
+  mysql:
+    image: mysql:latest
+    environment:
+      MYSQL_DATABASE: test
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: qwerty123
+      MYSQL_ROOT_PASSWORD: qwerty123
