@@ -1,0 +1,43 @@
+version: '3.7'
+
+services:
+  db:
+    container_name: postgresql_db
+    image: postgres:latest
+    environment:
+      - POSTGRES_PASSWORD=test
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=demo
+    ports:
+      - "5432:5432"
+    restart: always
+
+  maven:
+    image: maven:3
+    stop_signal: SIGKILL
+    stdin_open: true
+    tty: true
+    working_dir: $PWD
+    volumes:
+      - $PWD:$PWD
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ~/.m2:/root/.m2
+    command: mvn clean install
+    depends_on:
+      - db
+
+  app:
+    image: postgresql-jdbc-url-demo
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      POSTGRESQL_PASSWORD: test
+      POSTGRESQL_USERNAME: postgres
+      POSTGRESQL_URL: jdbc:postgresql://db:5432/demo
+    ports:
+      - "8080:8080"
+    restart: always
+    depends_on:
+      - db
+      - maven
