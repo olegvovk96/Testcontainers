@@ -78,13 +78,13 @@ class EventControllerTest {
 
     @Test
     @SneakyThrows
-    void testFindUsersBySpecificRoleIfSuccessful() {
-        objectMapper.readValue(getEventReponseBody("JClub_GD_Testcontainers", "Lviv"), new TypeReference<List<Event>>() {});
+    void testFindEventsByEventNameAndCityIfSuccessful() {
+        objectMapper.readValue(getEventResponseBody("JClub_GD_Testcontainers", "Lviv"), new TypeReference<List<Event>>() {});
 
         eventRepository.deleteAll();
 
         List<Event> cachedEvents = objectMapper.readValue(
-                getEventReponseBody("JClub_GD_Testcontainers", "Lviv"), new TypeReference<List<Event>>() {});
+                getEventResponseBody("JClub_GD_Testcontainers", "Lviv"), new TypeReference<List<Event>>() {});
 
         assertFalse(CollectionUtils.isEmpty(cachedEvents));
         assertEquals(1, cachedEvents.size());
@@ -95,15 +95,15 @@ class EventControllerTest {
 
     @Test
     @SneakyThrows
-    void testFindUsersBySpecificRoleIfNotFound() {
+    void testFindEventsByEventNameAndCityIfNotFound() {
         List<Event> events = objectMapper.readValue(
-                getEventReponseBody("Movie", "Saratov"), new TypeReference<List<Event>>() {});
+                getEventResponseBody("Movie", "Saratov"), new TypeReference<List<Event>>() {});
 
         assertTrue(CollectionUtils.isEmpty(events));
     }
 
     @SneakyThrows
-    private String getEventReponseBody(String eventName, String city) {
+    private String getEventResponseBody(String eventName, String city) {
         return mockMvc.perform(get("/events")
                 .param("eventName", eventName)
                 .param("city", city))
