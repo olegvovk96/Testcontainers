@@ -14,7 +14,7 @@ repositories {
 
 ext {
     jupiterVersion = '5.5.1'
-    jupiterTestcontainersVersion = '1.12.1'
+    jupiterTestcontainersVersion = '1.15.0'
     lombokVersion = '1.18.8'
 }
 
